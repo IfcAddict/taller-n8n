@@ -41,4 +41,4 @@ ${PUBLIC_IP}.nip.io {
 EOF
 
 # levantar contenedores
-docker-compose up -d
+docker compose up -d
