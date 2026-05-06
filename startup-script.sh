@@ -20,7 +20,7 @@ usermod -aG docker n8nuser
 cd /home/n8nuser
 
 # clonar repo base (tendrás que crearlo)
-git clone https://github.com/TU_USUARIO/n8n-workshop-template.git
+git clone https://github.com/IfcAddict/taller-n8n.git
 cd n8n-workshop-template
 
 # obtener IP pública
