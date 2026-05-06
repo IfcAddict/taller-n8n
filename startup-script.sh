@@ -1,16 +1,29 @@
 #!/bin/bash
 
+# Añadir claves GPG de docker
+apt update
+apt install ca-certificates curl
+install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+chmod a+r /etc/apt/keyrings/docker.asc
+
+# Añadir repositorio de docker
+tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/debian
+Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
+Components: stable
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+
 # actualizar sistema
 apt update -y
 
 # instalar docker
-apt install -y docker.io git
-systemctl start docker
-systemctl enable docker
+apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-# instalar docker compose
-curl -L "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
+systemctl status docker
+docker run hello-world
 
 # crear usuario de trabajo
 useradd -m n8nuser
@@ -18,10 +31,6 @@ usermod -aG docker n8nuser
 
 # ir al home
 cd /home/n8nuser
-
-# clonar repo base (tendrás que crearlo)
-git clone https://github.com/IfcAddict/taller-n8n.git
-cd taller-n8n
 
 # obtener IP pública
 PUBLIC_IP=$(curl -s ifconfig.me)
