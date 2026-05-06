@@ -22,16 +22,6 @@ apt update -y
 # instalar docker
 apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-systemctl status docker
-docker run hello-world
-
-# crear usuario de trabajo
-useradd -m n8nuser
-usermod -aG docker n8nuser
-
-# ir al home
-cd /home/n8nuser
-
 # obtener IP pública
 PUBLIC_IP=$(curl -s ifconfig.me)
 
@@ -43,8 +33,12 @@ N8N_PROTOCOL=https
 WEBHOOK_URL=https://${PUBLIC_IP}.nip.io/
 EOF
 
+# generar archivo caddy
+cat <<EOF > Caddyfile
+${PUBLIC_IP}.nip.io {
+    reverse_proxy n8n:5678
+}
+EOF
+
 # levantar contenedores
 docker-compose up -d
-
-# permisos
-chown -R n8nuser:n8nuser /home/n8nuser
