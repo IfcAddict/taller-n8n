@@ -21,7 +21,7 @@ cd /home/n8nuser
 
 # clonar repo base (tendrás que crearlo)
 git clone https://github.com/IfcAddict/taller-n8n.git
-cd n8n-workshop-template
+cd taller-n8n
 
 # obtener IP pública
 PUBLIC_IP=$(curl -s ifconfig.me)
